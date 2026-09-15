@@ -1,0 +1,38 @@
+name: TrustMRR Full Stalker
+
+on:
+  schedule:
+    # Runs every 12 hours. (Fetching the whole DB takes ~15-30 mins)
+    - cron: '0 */12 * * *' 
+  workflow_dispatch: # Allows you to click "Run workflow" manually
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Tracker
+        env:
+          TRUSTMRR_API_KEY: ${{ secrets.TRUSTMRR_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python tracker.py
+
+      - name: Commit updated state file
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add full_revenue_state.json
+          # Only commit if the file actually changed
+          git diff --staged --quiet || git commit -m "Update revenue state"
+          git push
