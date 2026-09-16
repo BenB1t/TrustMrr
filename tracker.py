@@ -3,6 +3,7 @@ import requests
 import json
 import time
 from datetime import datetime
+from html import escape # Added for safety
 
 # --- CONFIGURATION (Pulled from GitHub Secrets) ---
 API_KEY = os.environ.get("TRUSTMRR_API_KEY")
@@ -31,13 +32,14 @@ def send_notification(name, slug, old_mrr, new_mrr, is_new=False):
     
     old_mrr_usd = old_mrr / 100
     new_mrr_usd = new_mrr / 100
+    safe_name = escape(name) # Prevents HTML breaking if name has < or >
     
-    # Telegram uses HTML formatting
+    # Telegram uses html formatting
     if is_new:
-        text = f"🆕 <b>New Startup Found: {name}</b>\n\n"
+        text = f"🆕 <b>New Startup Found: {safe_name}</b>\n\n"
         text += f"💰 <b>Current MRR:</b> ${new_mrr_usd:,.2f}\n\n"
     else:
-        text = f"🚀 <b>Revenue Spike: {name}</b>\n\n"
+        text = f"🚀 <b>Revenue Spike: {safe_name}</b>\n\n"
         text += f"📉 <b>Previous MRR:</b> ${old_mrr_usd:,.2f}\n"
         text += f"📈 <b>Current MRR:</b> ${new_mrr_usd:,.2f}\n"
         text += f"🔥 <b>Growth:</b> +${new_mrr_usd - old_mrr_usd:,.2f}\n\n"
@@ -106,9 +108,14 @@ def main():
     growth_count = 0
     
     for startup in startups:
-        slug = startup["slug"]
-        name = startup["name"]
-        new_mrr = startup["revenue"]["mrr"]
+        slug = startup.get("slug")
+        name = startup.get("name", "Unknown Startup")
+        
+        if not slug:
+            continue
+            
+        revenue = startup.get("revenue", {})
+        new_mrr = revenue.get("mrr", 0)
         
         if new_mrr < MIN_MRR_TO_TRACK: continue
 
