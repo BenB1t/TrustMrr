@@ -3,13 +3,15 @@ import requests
 import json
 import time
 from datetime import datetime
-from html import escape # Added for safety
+from html import escape
 
 # --- CONFIGURATION (Pulled from GitHub Secrets) ---
 API_KEY = os.environ.get("TRUSTMRR_API_KEY")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 STATE_FILE = "full_revenue_state.json"
+DOCS_DIR = "docs"
+DASHBOARD_DATA_FILE = os.path.join(DOCS_DIR, "data.json")
 
 MIN_INCREASE_CENTS = 5000  # Ignore growth under $50
 MIN_MRR_TO_TRACK = 0       # Set to 50000 to only track startups making $500+ MRR
@@ -25,6 +27,39 @@ def save_state(state):
     with open(STATE_FILE, "w") as f:
         json.dump(state, f, indent=2)
 
+def export_dashboard_data(state):
+    os.makedirs(DOCS_DIR, exist_ok=True)
+    
+    startups = []
+    total_mrr_cents = 0
+    
+    for slug, info in state.items():
+        mrr_cents = info.get("mrr", 0)
+        if not isinstance(mrr_cents, (int, float)):
+            continue
+            
+        total_mrr_cents += mrr_cents
+        startups.append({
+            "slug": slug,
+            "name": info.get("name", slug),
+            "mrr_usd": round(mrr_cents / 100, 2),
+            "url": f"https://trustmrr.com/startup/{slug}"
+        })
+        
+    startups.sort(key=lambda x: x["mrr_usd"], reverse=True)
+    
+    payload = {
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "total_startups": len(startups),
+        "total_mrr_usd": round(total_mrr_cents / 100, 2),
+        "startups": startups
+    }
+    
+    with open(DASHBOARD_DATA_FILE, "w") as f:
+        json.dump(payload, f, indent=2)
+        
+    print(f"📊 Dashboard data exported: {DASHBOARD_DATA_FILE}")
+
 def send_notification(name, slug, old_mrr, new_mrr, is_new=False):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("⚠️ Missing Telegram credentials in GitHub Secrets.")
@@ -32,9 +67,8 @@ def send_notification(name, slug, old_mrr, new_mrr, is_new=False):
     
     old_mrr_usd = old_mrr / 100
     new_mrr_usd = new_mrr / 100
-    safe_name = escape(name) # Prevents HTML breaking if name has < or >
+    safe_name = escape(name)
     
-    # Telegram uses html formatting
     if is_new:
         text = f"🆕 <b>New Startup Found: {safe_name}</b>\n\n"
         text += f"💰 <b>Current MRR:</b> ${new_mrr_usd:,.2f}\n\n"
@@ -103,6 +137,11 @@ def main():
         return
 
     state = load_state()
+    first_run = len(state) == 0
+    
+    if first_run:
+        print("🌱 First run detected. Building baseline silently to avoid Telegram spam.")
+
     startups = fetch_all_startups()
     new_count = 0
     growth_count = 0
@@ -120,13 +159,14 @@ def main():
         if new_mrr < MIN_MRR_TO_TRACK: continue
 
         if slug not in state:
-            print(f"🆕 New: {name}")
-            send_notification(name, slug, 0, new_mrr, is_new=True)
+            if not first_run:
+                print(f"🆕 New: {name}")
+                send_notification(name, slug, 0, new_mrr, is_new=True)
+                new_count += 1
             state[slug] = {"mrr": new_mrr, "name": name}
-            new_count += 1
         else:
             old_mrr = state[slug]["mrr"]
-            if new_mrr > old_mrr + MIN_INCREASE_CENTS:
+            if not first_run and new_mrr > old_mrr + MIN_INCREASE_CENTS:
                 print(f"🚀 Growth: {name}")
                 send_notification(name, slug, old_mrr, new_mrr)
                 growth_count += 1
@@ -134,7 +174,12 @@ def main():
             state[slug]["name"] = name
 
     save_state(state)
-    print(f"✅ Done. {new_count} new, {growth_count} growth spikes.")
+    export_dashboard_data(state)
+    
+    if first_run:
+        print("✅ Baseline built. Dashboard data created. Future runs will send Telegram alerts.")
+    else:
+        print(f"✅ Done. {new_count} new, {growth_count} growth spikes.")
 
 if __name__ == "__main__":
     main()
