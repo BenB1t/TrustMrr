@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrustMRR Dashboard</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #0b1020;
+      color: #eef2ff;
+    }
+
+    header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    #meta {
+      color: #9aa4bf;
+      font-size: 14px;
+    }
+
+    main {
+      padding: 24px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: #121933;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .label {
+      color: #9aa4bf;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-box {
+      background: #121933;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 380px;
+    }
+
+    .chart-box h2,
+    .table-box h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    .chart-wrapper {
+      height: 300px;
+    }
+
+    .table-box {
+      background: #121933;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #0b1020;
+      color: white;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: left;
+    }
+
+    th {
+      color: #9aa4bf;
+      font-size: 13px;
+    }
+
+    a {
+      color: #7dd3fc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .empty {
+      padding: 24px;
+      color: #9aa4bf;
+    }
+
+    @media (max-width: 900px) {
+      .charts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>📊 TrustMRR Revenue Dashboard</h1>
+    <div id="meta">Loading data...</div>
+  </header>
+
+  <main>
+    <section class="cards">
+      <div class="card">
+        <div class="label">Startups tracked</div>
+        <div class="value" id="totalStartups">-</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Total MRR</div>
+        <div class="value" id="totalMrr">-</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Startups over $1k MRR</div>
+        <div class="value" id="above1k">-</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Startups over $10k MRR</div>
+        <div class="value" id="above10k">-</div>
+      </div>
+    </section>
+
+    <section class="charts">
+      <div class="chart-box">
+        <h2>Top 20 startups by MRR</h2>
+        <div class="chart-wrapper">
+          <canvas id="topChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h2>MRR tiers</h2>
+        <div class="chart-wrapper">
+          <canvas id="tierChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-box">
+      <h2>Startups</h2>
+      <input id="search" placeholder="Search startups..." />
+
+      <table id="startupTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Startup</th>
+            <th>MRR</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    let allStartups = [];
+    let topChart;
+    let tierChart;
+
+    function usd(value) {
+      return "$" + Number(value || 0).toLocaleString(undefined, {
+        maximumFractionDigits: 0
+      });
+    }
+
+    function renderTopChart(items) {
+      const ctx = document.getElementById("topChart");
+
+      if (topChart) {
+        topChart.destroy();
+      }
+
+      topChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: items.map(item => item.name),
+          datasets: [
+            {
+              label: "MRR",
+              data: items.map(item => item.mrr_usd),
+              backgroundColor: "#34d399",
+              borderRadius: 8
+            }
+          ]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: "#9aa4bf",
+                callback: function(value) {
+                  return usd(value);
+                }
+              },
+              grid: {
+                color: "rgba(255, 255, 255, 0.06)"
+              }
+            },
+            y: {
+              ticks: {
+                color: "#eef2ff"
+              },
+              grid: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderTierChart(items) {
+      const tiers = [
+        { label: "$0-$500", min: 0, max: 500 },
+        { label: "$500-$1k", min: 500, max: 1000 },
+        { label: "$1k-$5k", min: 1000, max: 5000 },
+        { label: "$5k-$10k", min: 5000, max: 10000 },
+        { label: "$10k+", min: 10000, max: Infinity }
+      ];
+
+      const counts = tiers.map(tier => {
+        return items.filter(item => {
+          return item.mrr_usd >= tier.min && item.mrr_usd < tier.max;
+        }).length;
+      });
+
+      const ctx = document.getElementById("tierChart");
+
+      if (tierChart) {
+        tierChart.destroy();
+      }
+
+      tierChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: tiers.map(tier => tier.label),
+          datasets: [
+            {
+              label: "Startups",
+              data: counts,
+              backgroundColor: [
+                "#60a5fa",
+                "#34d399",
+                "#fbbf24",
+                "#fb7185",
+                "#a78bfa"
+              ],
+              borderRadius: 8
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: "#9aa4bf"
+              },
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              ticks: {
+                color: "#9aa4bf"
+              },
+              grid: {
+                color: "rgba(255, 255, 255, 0.06)"
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderTable(items) {
+      const tbody = document.querySelector("#startupTable tbody");
+      tbody.innerHTML = "";
+
+      items.forEach((startup, index) => {
+        const row = document.createElement("tr");
+
+        const rankCell = document.createElement("td");
+        rankCell.textContent = index + 1;
+
+        const nameCell = document.createElement("td");
+        const link = document.createElement("a");
+        link.href = startup.url;
+        link.target = "_blank";
+        link.textContent = startup.name;
+        nameCell.appendChild(link);
+
+        const mrrCell = document.createElement("td");
+        mrrCell.textContent = usd(startup.mrr_usd);
+
+        row.appendChild(rankCell);
+        row.appendChild(nameCell);
+        row.appendChild(mrrCell);
+
+        tbody.appendChild(row);
+      });
+    }
+
+    async function init() {
+      try {
+        const response = await fetch("data.json?t=" + Date.now());
+
+        if (!response.ok) {
+          throw new Error("No data yet");
+        }
+
+        const data = await response.json();
+
+        allStartups = data.startups || [];
+
+        document.getElementById("meta").textContent =
+          "Last updated: " + new Date(data.generated_at).toLocaleString();
+
+        document.getElementById("totalStartups").textContent =
+          data.total_startups ?? allStartups.length;
+
+        document.getElementById("totalMrr").textContent =
+          usd(data.total_mrr_usd);
+
+        document.getElementById("above1k").textContent =
+          allStartups.filter(item => item.mrr_usd >= 1000).length;
+
+        document.getElementById("above10k").textContent =
+          allStartups.filter(item => item.mrr_usd >= 10000).length;
+
+        renderTopChart(allStartups.slice(0, 20));
+        renderTierChart(allStartups);
+        renderTable(allStartups.slice(0, 100));
+      } catch (error) {
+        document.getElementById("meta").textContent =
+          "Dashboard is ready. Waiting for the next tracker run to create data.json.";
+      }
+    }
+
+    document.getElementById("search").addEventListener("input", function(event) {
+      const query = event.target.value.toLowerCase();
+
+      const filtered = allStartups.filter(startup => {
+        return (
+          startup.name.toLowerCase().includes(query) ||
+          startup.slug.toLowerCase().includes(query)
+        );
+      });
+
+      renderTable(filtered.slice(0, 100));
+    });
+
+    init();
+  </script>
+</body>
+</html>
