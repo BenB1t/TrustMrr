@@ -6,7 +6,6 @@ on:
     - cron: '0 */12 * * *' 
   workflow_dispatch: 
 
-# THIS FIXES THE EXIT CODE 128 ERROR
 permissions:
   contents: write
 
@@ -14,11 +13,9 @@ jobs:
   track:
     runs-on: ubuntu-latest
     steps:
-      # Updated to v4 to fix the Node.js warning
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Updated to v5 to fix the Node.js warning
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -34,11 +31,10 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python tracker.py
 
-      - name: Commit updated state file
+      - name: Commit updated state and dashboard data
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add full_revenue_state.json
-          # Only commit if the file actually changed
-          git diff --staged --quiet || git commit -m "Update revenue state"
+          git add full_revenue_state.json docs/data.json
+          git diff --staged --quiet || git commit -m "Update revenue state and dashboard data"
           git push
