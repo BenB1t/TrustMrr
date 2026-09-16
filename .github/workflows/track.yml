@@ -2,19 +2,25 @@ name: TrustMRR Full Stalker
 
 on:
   schedule:
-    # Runs every 12 hours. (Fetching the whole DB takes ~15-30 mins)
+    # Runs every 12 hours
     - cron: '0 */12 * * *' 
-  workflow_dispatch: # Allows you to click "Run workflow" manually
+  workflow_dispatch: 
+
+# THIS FIXES THE EXIT CODE 128 ERROR
+permissions:
+  contents: write
 
 jobs:
   track:
     runs-on: ubuntu-latest
     steps:
+      # Updated to v4 to fix the Node.js warning
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
+      # Updated to v5 to fix the Node.js warning
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
