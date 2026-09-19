@@ -1,5 +1,3 @@
-
-
 import os
 import requests
 import json
@@ -25,21 +23,8 @@ FLATLINE_MRR_CENTS = 200000  # ...and under $2k MRR = market verdict. Never aler
 ALERT_COOLDOWN_DAYS = 3      # Don't re-alert the same startup within 3 days
 HISTORY_LIMIT = 90           # Snapshots kept per startup
 SLEEP_TIME = 6
-PAGE_LIMIT = 100             # If the API errors with this, set back to 10
+PAGE_LIMIT = 10              # API serves 10 per page regardless
 
-
-# ---------------------------------------------------------------
-# ⚠️ BEFORE DEPLOYING: verify field names against the real API.
-# Run this once locally:
-#
-#   import requests, json, os
-#   r = requests.get("https://trustmrr.com/api/v1/startups",
-#       headers={"Authorization": f"Bearer {os.environ['TRUSTMRR_API_KEY']}"},
-#       params={"page": 1, "limit": 1})
-#   print(json.dumps(r.json()["data"][0], indent=2))
-#
-# Then fix the key names inside extract_profile() to match.
-# ---------------------------------------------------------------
 
 def load_state():
     if os.path.exists(STATE_FILE):
@@ -197,8 +182,14 @@ def fetch_all_startups():
         response = requests.get(base_url, headers=headers, params=params)
 
         if response.status_code == 429:
-            reset_time = int(response.headers.get("X-RateLimit-Reset", time.time() + 60))
-            wait_time = max(1, reset_time - int(time.time()) + 2)
+            raw = response.headers.get("X-RateLimit-Reset")
+            try:
+                reset = int(raw)
+                if reset > 1e12:        # API sends milliseconds
+                    reset //= 1000
+                wait_time = max(1, min(120, reset - int(time.time()) + 2))
+            except (TypeError, ValueError):
+                wait_time = 15          # unknown format — safe default
             print(f"⚠️ Rate limited. Sleeping {wait_time}s...")
             time.sleep(wait_time)
             continue
