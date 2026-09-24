@@ -29,6 +29,8 @@ PAGE_LIMIT = 10                  # API serves 10 per page; max 10 per docs
 TELEGRAM_GAP_SECONDS = 1.0       # Telegram rate-limit insurance between sends
 REQUEST_TIMEOUT = 30
 MAX_429_RETRIES = 10
+MAX_REQUEST_RETRIES = 3          # Retry transient network errors (timeouts, connection drops)
+REQUEST_BACKOFF_SECONDS = 5      # Base backoff between request retries
 MAX_PAGES = 50                   # Defensive cap; with minMrr filter you'll rarely need this
 PRUNE_ABSENT_DAYS = 14           # Drop delisted startups from state after this many days
 
@@ -275,6 +277,19 @@ def send_notification(profile, age_months, old_mrr, verdict, flags):
 
 # === fetch + analytics ===
 
+def fetch_with_retries(session, url, params, timeout, max_retries=MAX_REQUEST_RETRIES):
+    """GET with retry on transient network errors. Raises on final failure."""
+    for attempt in range(1, max_retries + 1):
+        try:
+            return session.get(url, params=params, timeout=timeout)
+        except (requests.Timeout, requests.ConnectionError) as e:
+            if attempt >= max_retries:
+                raise
+            wait = REQUEST_BACKOFF_SECONDS * attempt
+            print(f"⚠️ Transient network error (attempt {attempt}/{max_retries}): {e}. Retrying in {wait}s...")
+            time.sleep(wait)
+
+
 def fetch_all_startups():
     """Returns the startup list, or None on hard failure (caller exits nonzero).
 
@@ -295,8 +310,8 @@ def fetch_all_startups():
 
     while True:
         try:
-            response = session.get(
-                base_url,
+            response = fetch_with_retries(
+                session, base_url,
                 params={
                     "page": page,
                     "limit": PAGE_LIMIT,
@@ -306,7 +321,7 @@ def fetch_all_startups():
                 timeout=REQUEST_TIMEOUT,
             )
         except requests.RequestException as e:
-            print(f"❌ Request failed: {e}")
+            print(f"❌ Request failed after {MAX_REQUEST_RETRIES} attempts: {e}")
             return None
 
         if response.status_code == 429:
