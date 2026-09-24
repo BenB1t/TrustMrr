@@ -277,19 +277,6 @@ def send_notification(profile, age_months, old_mrr, verdict, flags):
 
 # === fetch + analytics ===
 
-def fetch_with_retries(session, url, params, timeout, max_retries=MAX_REQUEST_RETRIES):
-    """GET with retry on transient network errors. Raises on final failure."""
-    for attempt in range(1, max_retries + 1):
-        try:
-            return session.get(url, params=params, timeout=timeout)
-        except (requests.Timeout, requests.ConnectionError) as e:
-            if attempt >= max_retries:
-                raise
-            wait = REQUEST_BACKOFF_SECONDS * attempt
-            print(f"⚠️ Transient network error (attempt {attempt}/{max_retries}): {e}. Retrying in {wait}s...")
-            time.sleep(wait)
-
-
 def fetch_all_startups():
     """Returns the startup list, or None on hard failure (caller exits nonzero).
 
@@ -309,19 +296,36 @@ def fetch_all_startups():
     print(f"🔍 Starting fetch (minMrr={API_MIN_MRR_CENTS}, sort={API_SORT})...")
 
     while True:
-        try:
-            response = fetch_with_retries(
-                session, base_url,
-                params={
-                    "page": page,
-                    "limit": PAGE_LIMIT,
-                    "sort": API_SORT,
-                    "minMrr": API_MIN_MRR_CENTS,
-                },
-                timeout=REQUEST_TIMEOUT,
-            )
-        except requests.RequestException as e:
-            print(f"❌ Request failed after {MAX_REQUEST_RETRIES} attempts: {e}")
+        response = None
+        for attempt in range(1, MAX_REQUEST_RETRIES + 1):
+            try:
+                response = session.get(
+                    base_url,
+                    params={
+                        "page": page,
+                        "limit": PAGE_LIMIT,
+                        "sort": API_SORT,
+                        "minMrr": API_MIN_MRR_CENTS,
+                    },
+                    timeout=REQUEST_TIMEOUT,
+                )
+            except (requests.Timeout, requests.ConnectionError) as e:
+                wait = REQUEST_BACKOFF_SECONDS * attempt
+                print(f"⚠️ Network error (attempt {attempt}/{MAX_REQUEST_RETRIES}): {e}. Retrying in {wait}s...")
+                time.sleep(wait)
+                continue
+
+            # 5xx is transient — retry (server overload, deploy in progress, etc.)
+            if 500 <= response.status_code < 600:
+                wait = REQUEST_BACKOFF_SECONDS * attempt
+                print(f"⚠️ Server error {response.status_code} (attempt {attempt}/{MAX_REQUEST_RETRIES}). Retrying in {wait}s...")
+                time.sleep(wait)
+                continue
+
+            break  # Got a definitive response — exit retry loop
+
+        if response is None:
+            print(f"❌ Request failed after {MAX_REQUEST_RETRIES} attempts (network errors)")
             return None
 
         if response.status_code == 429:
