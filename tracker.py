@@ -25,11 +25,18 @@ SUPPRESS_NEW_IF_FOR_SALE = True  # Listings ARE the event; no extra signal
 ALERT_COOLDOWN_DAYS = 3          # Don't re-alert the same startup within 3 days
 HISTORY_LIMIT = 90               # Snapshots kept per startup (~45 days at 12h cadence)
 SLEEP_TIME = 6
-PAGE_LIMIT = 10                  # API serves 10 per page regardless
+PAGE_LIMIT = 10                  # API serves 10 per page; max 10 per docs
 TELEGRAM_GAP_SECONDS = 1.0       # Telegram rate-limit insurance between sends
 REQUEST_TIMEOUT = 30
 MAX_429_RETRIES = 10
-PRUNE_ABSENT_DAYS = 14           # Drop delisted startups from state
+MAX_PAGES = 50                   # Defensive cap; with minMrr filter you'll rarely need this
+
+# --- API QUERY (server-side filters apply the rubric upstream) ---
+# minMrr here mirrors MIN_MRR_FLOOR_CENTS — anything below it can't alert, so don't fetch it.
+API_MIN_MRR_CENTS = MIN_MRR_FLOOR_CENTS
+# Sort options per docs: revenue-desc (default), revenue-asc, price-desc/asc,
+# multiple-desc/asc, growth-desc/asc, listed-desc/asc, best-deal
+API_SORT = "revenue-desc"
 
 # --- WEEKLY SUMMARY ---
 DIGEST_WEEKDAY = 0               # 0 = Monday (set to today's weekday to test)
@@ -104,7 +111,8 @@ def age_in_months(founded_dt):
 # === domain logic ===
 
 def extract_profile(startup):
-    """Pull rubric fields out of the raw API object, defensively."""
+    """Pull rubric fields out of the raw API object, defensively.
+    Field names from https://trustmrr.com/docs/api/list-startups."""
     revenue = startup.get("revenue", {}) or {}
     sale = startup.get("sale", {}) or {}
 
@@ -112,6 +120,7 @@ def extract_profile(startup):
     for_sale = bool(
         startup.get("forSale")
         or startup.get("isForSale")
+        or startup.get("onSale")         # canonical field per docs
         or asking
         or sale.get("listed")
     )
@@ -133,10 +142,12 @@ def extract_profile(startup):
         "name": startup.get("name") or "Unknown",
         "mrr": mrr,
         "subs": subs,
-        "founded": startup.get("foundedAt") or startup.get("founded"),
+        # Per docs: foundedDate is the canonical field name.
+        "founded": startup.get("foundedDate") or startup.get("foundedAt") or startup.get("founded"),
         "for_sale": for_sale,
         "asking_price": asking,
-        "category": startup.get("category") or startup.get("market"),
+        "category": startup.get("category"),
+        "growth_mrr_30d": startup.get("growthMRR30d"),  # 30-day MRR growth % per docs
     }
 
 
@@ -159,7 +170,7 @@ def evaluate(profile, age_months, old_mrr):
     if profile["for_sale"]:
         flags.append("for_sale")
 
-    # KILL: below the universal floor
+    # KILL: below the universal floor (defense in depth — API filter already does this)
     if new_mrr < MIN_MRR_FLOOR_CENTS:
         return None, flags
 
@@ -242,6 +253,10 @@ def send_notification(profile, age_months, old_mrr, verdict, flags):
         arpu_str = f"${arpu:,.2f}" if arpu < 10 else f"${arpu:,.0f}"
         lines.append(f"👥 {int(subs):,} users · {arpu_str}/user")
 
+    growth30 = profile.get("growth_mrr_30d")
+    if isinstance(growth30, (int, float)):
+        lines.append(f"📈 30-day MRR growth: <b>{growth30:+.1f}%</b>")
+
     if "for_sale" in flags:
         lines.append("🏷️ <b>FOR SALE</b> — founder exiting, discount the signal")
 
@@ -260,21 +275,33 @@ def send_notification(profile, age_months, old_mrr, verdict, flags):
 # === fetch + analytics ===
 
 def fetch_all_startups():
-    """Returns the startup list, or None on hard failure (caller exits nonzero)."""
+    """Returns the startup list, or None on hard failure (caller exits nonzero).
+
+    Uses server-side filters from https://trustmrr.com/docs/api/list-startups:
+      - minMrr=API_MIN_MRR_CENTS: drops sub-floor listings at the source
+      - sort=API_SORT: surfaces the most useful universe first
+      - limit=PAGE_LIMIT: 10 max per docs
+    """
     base_url = "https://trustmrr.com/api/v1/startups"
     session = requests.Session()
     session.headers.update({"Authorization": f"Bearer {API_KEY}"})
     all_startups = []
     page = 1
     retries_429 = 0
+    total_matching = None
 
-    print("🔍 Starting full database fetch...")
+    print(f"🔍 Starting fetch (minMrr={API_MIN_MRR_CENTS}, sort={API_SORT})...")
 
     while True:
         try:
             response = session.get(
                 base_url,
-                params={"page": page, "limit": PAGE_LIMIT, "sort": "listed-desc"},
+                params={
+                    "page": page,
+                    "limit": PAGE_LIMIT,
+                    "sort": API_SORT,
+                    "minMrr": API_MIN_MRR_CENTS,
+                },
                 timeout=REQUEST_TIMEOUT,
             )
         except requests.RequestException as e:
@@ -315,6 +342,12 @@ def fetch_all_startups():
             print("❌ Unexpected API shape (no 'data' key) — API may have changed.")
             return None
 
+        # Capture meta.total on first page so we know the full universe size
+        meta = data.get("meta", {}) or {}
+        if total_matching is None and isinstance(meta.get("total"), int):
+            total_matching = meta["total"]
+            print(f"📊 API reports {total_matching} matching startups (≥${API_MIN_MRR_CENTS/100:.0f} MRR)")
+
         startups = data.get("data") or []
         if not startups:
             break
@@ -322,11 +355,18 @@ def fetch_all_startups():
         all_startups.extend(startups)
         print(f"✅ Page {page} fetched. Total: {len(all_startups)}")
 
-        if not data.get("meta", {}).get("hasMore", False):
+        if not meta.get("hasMore", False):
             break
         page += 1
+        if page > MAX_PAGES:
+            print(f"⚠️ Cap reached at MAX_PAGES={MAX_PAGES} (~{MAX_PAGES * PAGE_LIMIT} listings).")
+            print(f"   API reports {total_matching} total matching; you may be missing {max(0, total_matching - MAX_PAGES * PAGE_LIMIT)}.")
+            print(f"   Raise MAX_PAGES if needed, or split fetches by category.")
+            break
         time.sleep(SLEEP_TIME)
 
+    if total_matching is not None and len(all_startups) < total_matching:
+        print(f"📌 Fetched {len(all_startups)}/{total_matching} matching startups.")
     return all_startups
 
 
@@ -554,6 +594,7 @@ def main():
             "founded": founded_dt.date().isoformat() if founded_dt else (info or {}).get("founded"),
             "for_sale": profile["for_sale"],
             "category": profile.get("category"),
+            "growth_mrr_30d": profile.get("growth_mrr_30d"),
             "history": history,
             "last_seen_t": now_ts,
             # Cooldown stamps ONLY on confirmed Telegram delivery.
