@@ -30,6 +30,7 @@ TELEGRAM_GAP_SECONDS = 1.0       # Telegram rate-limit insurance between sends
 REQUEST_TIMEOUT = 30
 MAX_429_RETRIES = 10
 MAX_PAGES = 50                   # Defensive cap; with minMrr filter you'll rarely need this
+PRUNE_ABSENT_DAYS = 14           # Drop delisted startups from state after this many days
 
 # --- API QUERY (server-side filters apply the rubric upstream) ---
 # minMrr here mirrors MIN_MRR_FLOOR_CENTS — anything below it can't alert, so don't fetch it.
