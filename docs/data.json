@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-28T18:14:38.634933+00:00",
+  "generated_at": "2026-09-28T19:03:41.553222+00:00",
   "total_startups": 31,
-  "total_mrr_usd": 78560.93,
+  "total_mrr_usd": 78560.51,
   "startups": [
     {
       "slug": "stan",
@@ -33,27 +33,27 @@
     {
       "slug": "white-glove-content",
       "name": "White Glove Content",
-      "mrr_usd": 667.03,
+      "mrr_usd": 666.65,
       "age_months": 5.4,
-      "velocity_usd": 123.52,
+      "velocity_usd": 123.45,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/white-glove-content"
     },
     {
       "slug": "trendstory",
       "name": "TrendStory",
-      "mrr_usd": 684.0,
+      "mrr_usd": 688.22,
       "age_months": 5.9,
-      "velocity_usd": 115.93,
+      "velocity_usd": 116.65,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/trendstory"
     },
     {
       "slug": "omegleweb",
       "name": "OmegleWeb",
-      "mrr_usd": 802.91,
+      "mrr_usd": 795.59,
       "age_months": 7.1,
-      "velocity_usd": 113.09,
+      "velocity_usd": 112.05,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/omegleweb"
     },
@@ -177,9 +177,9 @@
     {
       "slug": "podawaa",
       "name": "Podawaa",
-      "mrr_usd": 641.22,
+      "mrr_usd": 644.48,
       "age_months": 27.0,
-      "velocity_usd": 23.75,
+      "velocity_usd": 23.87,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/podawaa"
     },
@@ -258,7 +258,7 @@
     {
       "slug": "muxa-ai",
       "name": "Composer.AI",
-      "mrr_usd": 726.59,
+      "mrr_usd": 726.39,
       "age_months": null,
       "velocity_usd": null,
       "for_sale": true,
