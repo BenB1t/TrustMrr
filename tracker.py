@@ -435,12 +435,12 @@ def build_digest(state):
             continue
         slope = slope_per_day(info.get("history", []), SLOPE_WINDOW_DAYS)
         if slope is not None and slope > 0:
-            eligible.append((info.get("name") or slug, mrr, slope))
+            eligible.append((slug, info.get("name") or slug, mrr, slope))
         cat = info.get("category")
         if cat:
             cat_counts[cat] = cat_counts.get(cat, 0) + 1
 
-    eligible.sort(key=lambda x: x[2], reverse=True)
+    eligible.sort(key=lambda x: x[3], reverse=True)  # sort by slope (index 3 in tuple)
     top = eligible[:DIGEST_TOP_N]
 
     lines = [
@@ -451,9 +451,11 @@ def build_digest(state):
     ]
     if top:
         lines.append(f"🚀 Top {len(top)} growers (least-squares slope, $/day):")
-        for name, mrr, slope in top:
+        for slug, name, mrr, slope in top:
+            safe_slug = escape(str(slug), quote=True)
             lines.append(
-                f"  • {escape(str(name))} — "
+                f'  • <a href="https://trustmrr.com/startup/{safe_slug}">'
+                f'{escape(str(name))}</a> — '
                 f"${mrr/100:,.0f} MRR · +${slope/100:,.2f}/day"
             )
     else:
