@@ -575,6 +575,7 @@ def main():
     alert_count = 0
     sent_count = 0
     now_ts = int(time.time())
+    fetched_slugs = set()
 
     for startup in startups:
         profile = extract_profile(startup)
@@ -583,6 +584,8 @@ def main():
         slug = profile["slug"]
         if not slug:
             continue
+
+        fetched_slugs.add(slug)
 
         new_mrr = profile["mrr"]
         founded_dt = parse_date(profile["founded"])
@@ -620,6 +623,13 @@ def main():
             # Cooldown stamps ONLY on confirmed Telegram delivery.
             "last_alert_t": now_ts if sent_ok else (info or {}).get("last_alert_t"),
         }
+
+    # Drop state entries not in this run's fetch — prevents bloat from past
+    # unfiltered fetches and any future filter changes.
+    stale_count = len(state) - len(fetched_slugs)
+    if stale_count > 0:
+        print(f"🧹 Pruning {stale_count} stale state entries (not in latest fetch).")
+    state = {slug: info for slug, info in state.items() if slug in fetched_slugs}
 
     save_state(state)
     export_dashboard_data(state)
