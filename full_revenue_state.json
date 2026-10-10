@@ -1,11 +1,11 @@
 {
   "podawaa": {
     "name": "Podawaa",
-    "mrr": 65989,
+    "mrr": 66057,
     "founded": "2024-06-27",
     "for_sale": false,
     "category": "Social Media",
-    "growth_mrr_30d": -1.5609167884997541,
+    "growth_mrr_30d": -1.4595480239609675,
     "history": [
       {
         "t": 1790138566,
@@ -150,18 +150,22 @@
       {
         "t": 1791603781,
         "mrr": 65989
+      },
+      {
+        "t": 1791650626,
+        "mrr": 66057
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "white-glove-content": {
     "name": "White Glove Content",
-    "mrr": 70495,
+    "mrr": 71281,
     "founded": "2026-04-17",
     "for_sale": true,
     "category": "Content Creation",
-    "growth_mrr_30d": 32.601016679755254,
+    "growth_mrr_30d": 34.080610195952964,
     "history": [
       {
         "t": 1790138566,
@@ -306,18 +310,22 @@
       {
         "t": 1791603781,
         "mrr": 70495
+      },
+      {
+        "t": 1791650626,
+        "mrr": 71281
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "gotall": {
     "name": "GoTall",
-    "mrr": 58293,
+    "mrr": 58391,
     "founded": "2025-07-10",
     "for_sale": true,
     "category": "Health & Fitness",
-    "growth_mrr_30d": -2.753883960792137,
+    "growth_mrr_30d": -2.455571366879893,
     "history": [
       {
         "t": 1790138566,
@@ -462,18 +470,22 @@
       {
         "t": 1791603781,
         "mrr": 58293
+      },
+      {
+        "t": 1791650626,
+        "mrr": 58391
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "project-a": {
     "name": "Project A",
-    "mrr": 63860,
+    "mrr": 63831,
     "founded": null,
     "for_sale": true,
     "category": "Entertainment",
-    "growth_mrr_30d": -0.5991397056133909,
+    "growth_mrr_30d": -0.7913990086180492,
     "history": [
       {
         "t": 1790138566,
@@ -618,18 +630,22 @@
       {
         "t": 1791603781,
         "mrr": 63860
+      },
+      {
+        "t": 1791650626,
+        "mrr": 63831
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "1lookup": {
     "name": "1Lookup",
-    "mrr": 258823,
+    "mrr": 258352,
     "founded": "2022-01-19",
     "for_sale": true,
     "category": "SaaS",
-    "growth_mrr_30d": 8.166572338134165,
+    "growth_mrr_30d": 7.969775176760817,
     "history": [
       {
         "t": 1790138566,
@@ -774,18 +790,22 @@
       {
         "t": 1791603781,
         "mrr": 258823
+      },
+      {
+        "t": 1791650626,
+        "mrr": 258352
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "rezi": {
     "name": "Rezi",
-    "mrr": 251346,
+    "mrr": 251088,
     "founded": "2015-05-22",
     "for_sale": false,
     "category": "Artificial Intelligence",
-    "growth_mrr_30d": -1.4402796456057236,
+    "growth_mrr_30d": -1.5414482131435063,
     "history": [
       {
         "t": 1790138566,
@@ -930,9 +950,13 @@
       {
         "t": 1791603781,
         "mrr": 251346
+      },
+      {
+        "t": 1791650626,
+        "mrr": 251088
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "prosp": {
@@ -1086,9 +1110,13 @@
       {
         "t": 1791603781,
         "mrr": 128005
+      },
+      {
+        "t": 1791650626,
+        "mrr": 128005
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "speel-co": {
@@ -1242,18 +1270,22 @@
       {
         "t": 1791603781,
         "mrr": 65720
+      },
+      {
+        "t": 1791650626,
+        "mrr": 65720
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "postiz": {
     "name": "Postiz",
-    "mrr": 255545,
+    "mrr": 256825,
     "founded": "2024-07-24",
     "for_sale": false,
     "category": "Social Media",
-    "growth_mrr_30d": 20.200863284085376,
+    "growth_mrr_30d": 20.802543756085086,
     "history": [
       {
         "t": 1790138566,
@@ -1398,9 +1430,13 @@
       {
         "t": 1791603781,
         "mrr": 255545
+      },
+      {
+        "t": 1791650626,
+        "mrr": 256825
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "kibu": {
@@ -1554,9 +1590,13 @@
       {
         "t": 1791603781,
         "mrr": 234318
+      },
+      {
+        "t": 1791650626,
+        "mrr": 234318
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "dataexpert-techcreator": {
@@ -1710,9 +1750,13 @@
       {
         "t": 1791603781,
         "mrr": 56175
+      },
+      {
+        "t": 1791650626,
+        "mrr": 56175
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "aeo-engine": {
@@ -1866,18 +1910,22 @@
       {
         "t": 1791603781,
         "mrr": 160959
+      },
+      {
+        "t": 1791650626,
+        "mrr": 160959
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "codedex": {
     "name": "Cod\u00e9dex",
-    "mrr": 84814,
+    "mrr": 84794,
     "founded": "2022-11-07",
     "for_sale": false,
     "category": "Education",
-    "growth_mrr_30d": -2.309243776139068,
+    "growth_mrr_30d": -2.332226208028659,
     "history": [
       {
         "t": 1790138566,
@@ -2022,9 +2070,13 @@
       {
         "t": 1791603781,
         "mrr": 84814
+      },
+      {
+        "t": 1791650626,
+        "mrr": 84794
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "cometly": {
@@ -2178,9 +2230,13 @@
       {
         "t": 1791603781,
         "mrr": 202060
+      },
+      {
+        "t": 1791650626,
+        "mrr": 202060
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "dropkiller": {
@@ -2334,9 +2390,13 @@
       {
         "t": 1791603781,
         "mrr": 60178
+      },
+      {
+        "t": 1791650626,
+        "mrr": 60178
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "llm-gateway": {
@@ -2490,9 +2550,13 @@
       {
         "t": 1791603781,
         "mrr": 78764
+      },
+      {
+        "t": 1791650626,
+        "mrr": 78764
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "adspirer": {
@@ -2646,9 +2710,13 @@
       {
         "t": 1791603781,
         "mrr": 54683
+      },
+      {
+        "t": 1791650626,
+        "mrr": 54683
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "supergrow": {
@@ -2802,9 +2870,13 @@
       {
         "t": 1791603781,
         "mrr": 79478
+      },
+      {
+        "t": 1791650626,
+        "mrr": 79478
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "rankai": {
@@ -2958,9 +3030,13 @@
       {
         "t": 1791603781,
         "mrr": 56532
+      },
+      {
+        "t": 1791650626,
+        "mrr": 56532
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "stan": {
@@ -3114,18 +3190,22 @@
       {
         "t": 1791603781,
         "mrr": 3569654
+      },
+      {
+        "t": 1791650626,
+        "mrr": 3569654
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "brand-on-demand-inc": {
     "name": "Brand On Demand, Inc.",
-    "mrr": 180234,
+    "mrr": 179802,
     "founded": "2017-06-11",
     "for_sale": false,
     "category": "E-commerce",
-    "growth_mrr_30d": -1.026251650852973,
+    "growth_mrr_30d": -1.5704933737825375,
     "history": [
       {
         "t": 1790138566,
@@ -3270,18 +3350,22 @@
       {
         "t": 1791603781,
         "mrr": 180234
+      },
+      {
+        "t": 1791650626,
+        "mrr": 179802
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "upscale-system-llc": {
     "name": "Upscale System LLC",
-    "mrr": 100775,
+    "mrr": 100151,
     "founded": "2023-03-31",
     "for_sale": false,
     "category": "Artificial Intelligence",
-    "growth_mrr_30d": 13.29926172987558,
+    "growth_mrr_30d": 13.116585597253177,
     "history": [
       {
         "t": 1790138566,
@@ -3426,18 +3510,22 @@
       {
         "t": 1791603781,
         "mrr": 100775
+      },
+      {
+        "t": 1791650626,
+        "mrr": 100151
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "propgpt-ai-props-analysis": {
     "name": "PropGPT: AI Props Analysis",
-    "mrr": 82319,
+    "mrr": 83032,
     "founded": "2024-09-15",
     "for_sale": false,
     "category": "Mobile Apps",
-    "growth_mrr_30d": 12.555812775602124,
+    "growth_mrr_30d": 9.522006337383543,
     "history": [
       {
         "t": 1790138566,
@@ -3582,18 +3670,22 @@
       {
         "t": 1791603781,
         "mrr": 82319
+      },
+      {
+        "t": 1791650626,
+        "mrr": 83032
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "promptwise": {
     "name": "Promptwise",
-    "mrr": 57184,
+    "mrr": 57356,
     "founded": "2025-12-18",
     "for_sale": false,
     "category": "Artificial Intelligence",
-    "growth_mrr_30d": -1.895702074549985,
+    "growth_mrr_30d": -1.6019111421819447,
     "history": [
       {
         "t": 1790138566,
@@ -3738,9 +3830,13 @@
       {
         "t": 1791603781,
         "mrr": 57184
+      },
+      {
+        "t": 1791650626,
+        "mrr": 57356
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "superfruits": {
@@ -3894,9 +3990,13 @@
       {
         "t": 1791603781,
         "mrr": 424368
+      },
+      {
+        "t": 1791650626,
+        "mrr": 424368
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "chatbase": {
@@ -4050,18 +4150,22 @@
       {
         "t": 1791603781,
         "mrr": 863631
+      },
+      {
+        "t": 1791650626,
+        "mrr": 863631
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "omegleweb": {
     "name": "OmegleWeb",
-    "mrr": 79839,
+    "mrr": 80198,
     "founded": "2026-02-23",
     "for_sale": false,
     "category": "Social Media",
-    "growth_mrr_30d": -33.65169518502899,
+    "growth_mrr_30d": -33.35337949471844,
     "history": [
       {
         "t": 1790138566,
@@ -4206,9 +4310,13 @@
       {
         "t": 1791603781,
         "mrr": 79839
+      },
+      {
+        "t": 1791650626,
+        "mrr": 80198
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "windmill-growth-llc": {
@@ -4338,9 +4446,13 @@
       {
         "t": 1791603781,
         "mrr": 121947
+      },
+      {
+        "t": 1791650626,
+        "mrr": 121947
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": null
   },
   "reddit-agency": {
@@ -4362,9 +4474,13 @@
       {
         "t": 1791603781,
         "mrr": 51083
+      },
+      {
+        "t": 1791650626,
+        "mrr": 51083
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": 1791518272
   },
   "traxy-ai": {
@@ -4378,9 +4494,13 @@
       {
         "t": 1791603781,
         "mrr": 51543
+      },
+      {
+        "t": 1791650626,
+        "mrr": 51543
       }
     ],
-    "last_seen_t": 1791603781,
+    "last_seen_t": 1791650626,
     "last_alert_t": 1791603781
   }
 }
