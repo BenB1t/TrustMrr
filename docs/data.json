@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-27T20:31:52.530970+00:00",
+  "generated_at": "2026-11-28T05:47:00.565733+00:00",
   "total_startups": 32,
-  "total_mrr_usd": 75334.99,
+  "total_mrr_usd": 75277.5,
   "startups": [
     {
       "slug": "stan",
@@ -24,27 +24,27 @@
     {
       "slug": "postiz",
       "name": "Postiz",
-      "mrr_usd": 4827.21,
-      "age_months": 28.1,
-      "velocity_usd": 171.79,
+      "mrr_usd": 4839.49,
+      "age_months": 28.2,
+      "velocity_usd": 171.61,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/postiz"
     },
     {
       "slug": "iker",
       "name": "Gomotion AI",
-      "mrr_usd": 701.94,
+      "mrr_usd": 700.32,
       "age_months": 4.4,
-      "velocity_usd": 159.53,
+      "velocity_usd": 159.16,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/iker"
     },
     {
       "slug": "boothie",
       "name": "Boothie: AI Photo Editor",
-      "mrr_usd": 540.44,
+      "mrr_usd": 530.9,
       "age_months": 5.2,
-      "velocity_usd": 103.93,
+      "velocity_usd": 102.1,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/boothie"
     },
@@ -60,18 +60,18 @@
     {
       "slug": "white-glove-content",
       "name": "White Glove Content",
-      "mrr_usd": 538.98,
+      "mrr_usd": 531.75,
       "age_months": 7.4,
-      "velocity_usd": 72.84,
+      "velocity_usd": 71.86,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/white-glove-content"
     },
     {
       "slug": "promptwise",
       "name": "Promptwise",
-      "mrr_usd": 676.77,
+      "mrr_usd": 678.42,
       "age_months": 11.3,
-      "velocity_usd": 59.89,
+      "velocity_usd": 60.04,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/promptwise"
     },
@@ -79,8 +79,8 @@
       "slug": "adspirer",
       "name": "Adspirer",
       "mrr_usd": 546.83,
-      "age_months": 10.8,
-      "velocity_usd": 50.63,
+      "age_months": 10.9,
+      "velocity_usd": 50.17,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/adspirer"
     },
@@ -96,63 +96,54 @@
     {
       "slug": "1lookup",
       "name": "1Lookup",
-      "mrr_usd": 2515.64,
-      "age_months": 58.2,
+      "mrr_usd": 2519.77,
+      "age_months": 58.3,
       "velocity_usd": 43.22,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/1lookup"
     },
     {
-      "slug": "aisdr-inc",
-      "name": "AiSDR INC.",
-      "mrr_usd": 1708.31,
-      "age_months": 40.4,
-      "velocity_usd": 42.28,
-      "for_sale": false,
-      "url": "https://trustmrr.com/startup/aisdr-inc"
-    },
-    {
       "slug": "speel-co",
       "name": "Speel.co",
-      "mrr_usd": 629.01,
+      "mrr_usd": 628.77,
       "age_months": 14.9,
-      "velocity_usd": 42.22,
+      "velocity_usd": 42.2,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/speel-co"
+    },
+    {
+      "slug": "aisdr-inc",
+      "name": "AiSDR INC.",
+      "mrr_usd": 1699.3,
+      "age_months": 40.4,
+      "velocity_usd": 42.06,
+      "for_sale": false,
+      "url": "https://trustmrr.com/startup/aisdr-inc"
     },
     {
       "slug": "kibu",
       "name": "Kibu",
       "mrr_usd": 2343.18,
-      "age_months": 58.2,
-      "velocity_usd": 40.26,
+      "age_months": 58.3,
+      "velocity_usd": 40.19,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/kibu"
     },
     {
       "slug": "windmill-growth-llc",
       "name": "Windmill Growth, LLC",
-      "mrr_usd": 1118.97,
-      "age_months": 30.4,
-      "velocity_usd": 36.81,
+      "mrr_usd": 1128.97,
+      "age_months": 30.5,
+      "velocity_usd": 37.02,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/windmill-growth-llc"
     },
     {
-      "slug": "upscale-system-llc",
-      "name": "Upscale System LLC",
-      "mrr_usd": 1318.12,
-      "age_months": 43.9,
-      "velocity_usd": 30.03,
-      "for_sale": false,
-      "url": "https://trustmrr.com/startup/upscale-system-llc"
-    },
-    {
       "slug": "rank-prompt",
       "name": "Rank Prompt",
-      "mrr_usd": 549.2,
-      "age_months": 18.4,
-      "velocity_usd": 29.85,
+      "mrr_usd": 546.7,
+      "age_months": 18.5,
+      "velocity_usd": 29.55,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/rank-prompt"
     },
@@ -160,17 +151,26 @@
       "slug": "dm-champ",
       "name": "DM Champ",
       "mrr_usd": 1359.27,
-      "age_months": 46.8,
-      "velocity_usd": 29.04,
+      "age_months": 46.9,
+      "velocity_usd": 28.98,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/dm-champ"
     },
     {
+      "slug": "upscale-system-llc",
+      "name": "Upscale System LLC",
+      "mrr_usd": 1262.99,
+      "age_months": 44.0,
+      "velocity_usd": 28.7,
+      "for_sale": false,
+      "url": "https://trustmrr.com/startup/upscale-system-llc"
+    },
+    {
       "slug": "cometly",
       "name": "Cometly",
-      "mrr_usd": 1910.47,
+      "mrr_usd": 1903.47,
       "age_months": 73.0,
-      "velocity_usd": 26.17,
+      "velocity_usd": 26.07,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/cometly"
     },
@@ -186,36 +186,36 @@
     {
       "slug": "kolbo-ai",
       "name": "Kolbo.AI",
-      "mrr_usd": 528.26,
+      "mrr_usd": 527.89,
       "age_months": 22.3,
-      "velocity_usd": 23.69,
+      "velocity_usd": 23.67,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/kolbo-ai"
     },
     {
       "slug": "podawaa",
       "name": "Podawaa",
-      "mrr_usd": 614.84,
+      "mrr_usd": 613.98,
       "age_months": 29.0,
-      "velocity_usd": 21.2,
+      "velocity_usd": 21.17,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/podawaa"
     },
     {
       "slug": "vidai-llc",
       "name": "Vid.AI",
-      "mrr_usd": 551.46,
+      "mrr_usd": 549.69,
       "age_months": 26.1,
-      "velocity_usd": 21.13,
+      "velocity_usd": 21.06,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/vidai-llc"
     },
     {
       "slug": "post-bridge",
       "name": "POST BRIDGE",
-      "mrr_usd": 500.41,
+      "mrr_usd": 501.34,
       "age_months": 25.9,
-      "velocity_usd": 19.32,
+      "velocity_usd": 19.36,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/post-bridge"
     },
@@ -231,16 +231,16 @@
     {
       "slug": "rezi",
       "name": "Rezi",
-      "mrr_usd": 2294.7,
+      "mrr_usd": 2291.73,
       "age_months": 138.2,
-      "velocity_usd": 16.6,
+      "velocity_usd": 16.58,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/rezi"
     },
     {
       "slug": "codedex",
       "name": "Cod\u00e9dex",
-      "mrr_usd": 790.42,
+      "mrr_usd": 790.17,
       "age_months": 48.7,
       "velocity_usd": 16.23,
       "for_sale": false,
@@ -249,9 +249,9 @@
     {
       "slug": "brand-on-demand-inc",
       "name": "Brand On Demand, Inc.",
-      "mrr_usd": 1739.66,
-      "age_months": 113.5,
-      "velocity_usd": 15.33,
+      "mrr_usd": 1742.56,
+      "age_months": 113.6,
+      "velocity_usd": 15.34,
       "for_sale": false,
       "url": "https://trustmrr.com/startup/brand-on-demand-inc"
     },
@@ -267,16 +267,16 @@
     {
       "slug": "conductor",
       "name": "Conductor",
-      "mrr_usd": 525.35,
+      "mrr_usd": 527.71,
       "age_months": 51.9,
-      "velocity_usd": 10.12,
+      "velocity_usd": 10.17,
       "for_sale": true,
       "url": "https://trustmrr.com/startup/conductor"
     },
     {
       "slug": "project-a",
       "name": "Project A",
-      "mrr_usd": 610.6,
+      "mrr_usd": 617.35,
       "age_months": null,
       "velocity_usd": null,
       "for_sale": true,
